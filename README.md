@@ -17,7 +17,7 @@ L'output della validazione è inserito nel file 'risultato.txt'. <br />
   <tr><td>7</td><td>'stop_codon' è incluso nelle coordinate di almeno un record 'CDS' o '3UTR'</td></tr>
   <tr><td>8</td><td>Il numero di campi è errato: devono esserci esattamente 9 campi separati da '\t'</td></tr>
   <tr><td>9</td><td>Il separatore degli attributi di un regord è sbagliato: ogni attributo deve terminare con punto e virgola e deve essere separato dal successivo esattamente da uno spazio</td></tr>
-  <tr><td>10</td><td>Attributo ha formato sbagliato: ogni attributo deve essere una coppia nome valore separati esattamente da uno spazio</td></tr>
+  <tr><td>10</td><td>Attributo ha formato sbagliato: ogni attributo deve essere una coppia nome-valore, gli elementi devone essere separati esattamente da uno spazio</td></tr>
   <tr><td>11</td><td>Valore testuale di un attributo non è compreso da doppi apici</td></tr>
   <tr><td>12</td><td>Ordine attributi sbagliato: transfert_id e gene_id devono essere i primi due attributi per ogni record</td></tr>
   <tr><td>13</td><td>L'attributo obbligatorio gene_id non è presente in un record</td></tr>
