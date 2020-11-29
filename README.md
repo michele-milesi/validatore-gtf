@@ -2,7 +2,8 @@
 
 La tabella sottostante specifica le violazioni considerate e gli ID ad esse associati.<br /><br />
 Nella cartella esempi sono presenti i file GTF che includono le violazioni considerate: il file associato ad una determinata violazoine è 'ID.gtf',
-  per esempio il file che contiene la violazione 2 ('start_codon' mancante) è presente nel file '2.gtf' nella cartella esempi.<br /><br />
+  per esempio il file che contiene la violazione 2 ('start_codon' mancante) è il file '2.gtf' nella cartella esempi.<br /><br />
+Il validatore richiede in input il nome del file da validare.<br />
 L'output della validazione è inserito nel file 'risultato.txt'. <br />
 
 
