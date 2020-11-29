@@ -8,7 +8,7 @@ Created on Fri Nov  6 20:28:14 2020
 import re
 
 #Riceve come parametro la stringa che contiene il nome del file
-#e legge riga per riga
+#e legge le rige del file mettendole in una lista
 def read_file(file_name):
     with open(file_name, 'r') as input_file:
         file_rows = input_file.readlines()
@@ -40,7 +40,7 @@ def format_rows(string_list):
 
 #Verifica che il campo degli attributi sia corretto
 #Ogni attributo deve terminare con un punto e virgola (;) ed essere separato dal successivo da esattamente uno spazio
-#Ogni coppia nome_attributo e valore_attributo deve essere separata esattamente da uno spazio
+#Ogni attributo è composto dalla coppia nome_attributo-valore_attributo, questi due elementi devono essere sepaeati esattamente da uno spazio
 #I valori non numerici devono essere inclusi in doppi apici
 #attributi gene_id e transcript_id sono obbligatori e devono essere i primi due attributi di ogni riga
 #Il valore di transcript_id nei record 'intron_CNS' deve essere diverso da ""
@@ -50,7 +50,7 @@ def format_rows(string_list):
 def check_attributes(row, errors):
     field_list = row[1].split('\t')
     mandatory_attributes = {'transcript_id': False, 'gene_id': False}   
-    attribute_order = []
+    attribute_order = []    #contiene il nome degli attributi in ordine (come sono ordinati nel record)
     attribute_name_with_dublequotes = False
     feature = field_list[2]
 
@@ -76,7 +76,7 @@ def check_attributes(row, errors):
                     mandatory_attributes[attribute_component[0]] = True
                 attribute_order.append(attribute_component[0])
                 
-                if attribute_component[0] == 'transcript_id':      
+                if attribute_component[0] == 'transcript_id':
                     if feature == 'intron_CNS' and attribute_component[1] == '""':
                         update_dict(errors[0], row[0], "Illegal value of transcript_id: a 'intron_CNS' record musn't have transcript_id equal to \"\"")
                     if feature in ['inter_CNS', 'inter'] and attribute_component[1] != '""':
@@ -236,7 +236,7 @@ def check_start_codon(row_dict, errors):
     if len(rows_not_in_cds) > 0:
         update_dict(errors[0], 0, 'The start_codon must be included in coordinates for CDS features, violation at lines: ' + ', '.join(rows_not_in_cds))
     if len(rows_in_5UTR):
-        update_dict(errors[0], 0, 'The stop codon must be exluded from the coordinates for the "5UTR" features, violation at lines: ' + ', '.join(rows_in_5UTR))
+        update_dict(errors[0], 0, 'The start_codon must be exluded from the coordinates for the "5UTR" features, violation at lines: ' + ', '.join(rows_in_5UTR))
     return
 
 
@@ -280,27 +280,32 @@ def check_stop_codon(row_dict, errors):
 
 #Si occupa di stampare le violazioni (se presenti)
 def print_errors(file_input_name, errors):
+    # Scrive un file.
+    out_file = open("./risulato.txt", "w")
     if errors == {}:
-        print("The file '"+ file_input_name + "' is correct")
+        out_file.write("The file '"+ file_input_name + "' is correct\n")
     else:
-        print('Violations in file \'' + file_input_name + '\':')
+        out_file.write('Violations in file \'' + file_input_name + '\':\n\n')
         if 0 in errors:
-            print("Gereral errors:")
+            out_file.write("Gereral errors:\n")
             for error in errors[0]:
-                print("\t" + error)
+                out_file.write("\t" + error + '\n')
             del errors[0]
-            print()
+            out_file.write('\n')
         for line in dict(sorted(errors.items())):
-            print("At line " + str(line) + ":")
+            out_file.write("At line " + str(line) + ":\n")
             for error in errors[line]:
-                print("\t" + error)
-            print()
+                out_file.write("\t" + error + '\n')
+            out_file.write('\n')
+    out_file.close()
 
 
 
 
 #variabile composta da un dizionario e una lista
 #il dizionario conterrà tutte le violazioni presenti: la chiave è il numero di riga e il valore è una lista che contiene tutte le violazioni di quella riga
+#Alla chiave 0 vengono aggiunti tutti gli errori che comprendono + righe o a cui non è possibile associare una singola riga, ad esempio,
+#la violazione "start_codon mancante" non è riconducibile ad una singola riga, ma all'intero file 
 #la lista conterrà tutte le righe che hanno valori irregolari di start o end o start > end, questa lista serve per verificare in modo rapido 
 #se è possibile convertire in intero i campi start e end, nel caso questi valori servissero per qualche ulteriore controllo
 errors = ({}, [])
