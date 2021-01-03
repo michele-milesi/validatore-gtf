@@ -1,4 +1,5 @@
-# Progetto Elementi di Bioinformatica - Validatore File GTF
+# Validatore File GTF
+## Progetto Elementi di Bioinformatica - UniMiB
 
 La tabella sottostante specifica le violazioni considerate e gli ID ad esse associati.<br /><br />
 Nella cartella esempi sono presenti i file GTF che includono le violazioni considerate: il file associato ad una determinata violazoine è 'ID.gtf',
